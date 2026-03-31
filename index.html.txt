@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Villa Guest Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2D5016;
+            --soft-green: #4A7C59;
+            --light-green: #8FBC8F;
+            --beige: #F5F5DC;
+            --cream: #FFFEF7;
+            --earth: #8B7355;
+            --sand: #D4C4B0;
+            --text-dark: #2C3E2D;
+            --text-light: #5A6B5C;
+            --shadow: rgba(45, 80, 22, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--beige) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--soft-green) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Villa Selection Cards */
+        .villa-selection {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .villa-card {
+            position: relative;
+            height: 280px;
+            border-radius: 24px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px var(--shadow);
+            text-decoration: none;
+            display: block;
+        }
+
+        .villa-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(45, 80, 22, 0.2);
+        }
+
+        .villa-card:active {
+            transform: scale(0.98);
+        }
+
+        .villa-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.6s ease;
+        }
+
+        .villa-card:hover .villa-bg {
+            transform: scale(1.1);
+        }
+
+        .villa-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+
+        .villa-name {
+            color: white;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .villa-location {
+            color: var(--sand);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .villa-arrow {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .villa-card:hover .villa-arrow {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-50%) translateX(5px);
+        }
+
+        .villa-arrow svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            transition: fill 0.3s ease;
+        }
+
+        .villa-card:hover .villa-arrow svg {
+            fill: var(--primary-green);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .footer-brand {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .villa-selection {
+                flex-direction: row;
+            }
+            
+            .villa-card {
+                flex: 1;
+                height: 400px;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <header class="header">
+        <h1>WELCOME</h1>
+        <p>Select Your Villa</p>
+    </header>
+
+    <main class="container">
+        <div class="villa-selection">
+            <a href="ella.html" class="villa-card animate-in delay-1">
+                <div class="villa-bg" style="background-image: url('https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=800&q=80');"></div>
+                <div class="villa-overlay">
+                    <h2 class="villa-name">Ella Villa</h2>
+                    <p class="villa-location">Hill Country Retreat</p>
+                    <div class="villa-arrow">
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </div>
+                </div>
+            </a>
+
+            <a href="yala.html" class="villa-card animate-in delay-2">
+                <div class="villa-bg" style="background-image: url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80');"></div>
+                <div class="villa-overlay">
+                    <h2 class="villa-name">Yala Villa</h2>
+                    <p class="villa-location">Wilderness Sanctuary</p>
+                    <div class="villa-arrow">
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-brand">BOUTIQUE VILLAS</div>
+        <p>Your exclusive retreat awaits</p>
+    </footer>
+
+    <script>
+        // Touch feedback for mobile
+        document.querySelectorAll('.villa-card').forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('touchend', function() {
+                this.style.transform = '';
+            });
+        });
+
+        // Optional: URL parameter handling for dynamic routing
+        const urlParams = new URLSearchParams(window.location.search);
+        const villaParam = urlParams.get('villa');
+        if (villaParam === 'ella') {
+            window.location.href = 'ella.html';
+        } else if (villaParam === 'yala') {
+            window.location.href = 'yala.html';
+        }
+    </script>
+</body>
+</html>

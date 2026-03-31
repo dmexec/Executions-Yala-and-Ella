@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ella Villa - Guest Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2D5016;
+            --soft-green: #4A7C59;
+            --light-green: #8FBC8F;
+            --beige: #F5F5DC;
+            --cream: #FFFEF7;
+            --earth: #8B7355;
+            --sand: #D4C4B0;
+            --text-dark: #2C3E2D;
+            --text-light: #5A6B5C;
+            --shadow: rgba(45, 80, 22, 0.1);
+            --accent: #E8B86D;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        /* Sticky Header */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--soft-green) 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+        }
+
+        .villa-title {
+            font-size: 1.3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .villa-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        /* Quick Actions Bar */
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .action-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Main Content */
+        .content {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--soft-green);
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 115, 85, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(45, 80, 22, 0.15);
+        }
+
+        .card-image {
+            width: calc(100% + 3rem);
+            margin: -1.5rem -1.5rem 1rem -1.5rem;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .card-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .card-tag {
+            display: inline-block;
+            background: var(--light-green);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Experience Cards */
+        .exp-card {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 2px 15px var(--shadow);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .exp-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 4px 25px rgba(45, 80, 22, 0.15);
+        }
+
+        .exp-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--beige) 0%, var(--sand) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .exp-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--primary-green);
+        }
+
+        .exp-content h3 {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .exp-content p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Service Grid */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .service-btn {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 15px var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .service-btn:hover {
+            border-color: var(--light-green);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.15);
+        }
+
+        .service-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--soft-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-btn h4 {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .service-btn p {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* Floating Bottom Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 -4px 20px var(--shadow);
+            display: flex;
+            gap: 1rem;
+            z-index: 99;
+        }
+
+        .bottom-btn {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--soft-green) 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .bottom-btn.secondary {
+            background: var(--beige);
+            color: var(--primary-green);
+        }
+
+        .bottom-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+        }
+
+        .bottom-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal h3 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .modal input, .modal textarea, .modal select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--beige);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .modal input:focus, .modal textarea:focus, .modal select:focus {
+            outline: none;
+            border-color: var(--soft-green);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: var(--beige);
+            color: var(--text-dark);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <header class="sticky-header">
+        <div class="header-top">
+            <a href="index.html" class="back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                Back
+            </a>
+            <div>
+                <div class="villa-title">ELLA VILLA</div>
+                <div class="villa-subtitle">Hill Country Retreat</div>
+            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <a href="tel:+94123456789" class="action-btn">
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                Call
+            </a>
+            <a href="https://wa.me/94123456789" class="action-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.52 3.45A12.07 12.07 0 0 0 12 0 12.24 12.24 0 0 0 0 12.23 12.32 12.32 0 0 0 1.68 18L0 24l6.15-1.64a12.23 12.23 0 0 0 5.84 1.49h.01A12.24 12.24 0 0 0 24 12.23a11.94 11.94 0 0 0-3.48-8.78zM12 21.85a9.7 9.7 0 0 1-4.95-1.36l-.36-.21-3.76 1 1-3.66-.24-.38A9.71 9.71 0 0 1 21.15 6.4 9.63 9.63 0 0 1 12 21.85zm5.3-7.25c-.29-.15-1.72-.85-1.99-.94s-.46-.15-.65.15-.75.94-.92 1.13-.34.22-.63.07a8.06 8.06 0 0 1-2.36-1.46 8.88 8.88 0 0 1-1.64-2.03c-.17-.29 0-.45.13-.6s.29-.34.44-.51a1.91 1.91 0 0 0 .29-.48.53.53 0 0 0 0-.51c-.07-.15-.65-1.56-.89-2.13s-.47-.48-.65-.49h-.55a1.06 1.06 0 0 0-.76.35 3.23 3.23 0 0 0-1 2.28 5.61 5.61 0 0 0 1.17 2.95 12.81 12.81 0 0 0 4.91 4.35 16.25 16.25 0 0 0 1.69.63 4.1 4.1 0 0 0 1.87.12 3 3 0 0 0 2-1.39 2.41 2.41 0 0 0 .17-1.39c-.07-.13-.26-.2-.55-.34z"/></svg>
+                WhatsApp
+            </a>
+            <button class="action-btn" onclick="openModal('emergency')">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                Emergency
+            </button>
+        </div>
+    </header>
+
+    <main class="content">
+        <!-- Promotions Section -->
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Special Promotions
+            </h2>
+            
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80" alt="Spa" class="card-image">
+                <h3 class="card-title">10% Off Spa Treatments</h3>
+                <p class="card-desc">Indulge in our traditional Ayurvedic treatments with panoramic hill views. Valid for all guests staying 2+ nights.</p>
+                <span class="card-tag">Valid until Dec 2024</span>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Complimentary Tea Tasting</h3>
+                <p class="card-desc">Experience world-famous Ceylon tea at our hillside pavilion. Daily at 4 PM, includes local snacks.</p>
+                <span class="card-tag">Daily Activity</span>
+            </div>
+        </section>
+
+        <!-- Experiences Section -->
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>
+                Local Experiences
+            </h2>
+
+            <a href="#" class="exp-card" onclick="showExperienceDetail('hiking'); return false;">
+                <div class="exp-icon">
+                    <svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>
+                </div>
+                <div class="exp-content">
+                    <h3>Ella Rock Hiking</h3>
+                    <p>4-hour guided trek to stunning viewpoints</p>
+                </div>
+            </a>
+
+            <a href="#" class="exp-card" onclick="showExperienceDetail('train'); return false;">
+                <div class="exp-icon">
+                    <svg viewBox="0 0 24 24"><path d="M4 15.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V5c0-3.5-3.58-4-8-4s-8 .5-8 4v10.5zm8 1.5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6-7H6V5h12v5z"/></svg>
+                </div>
+                <div class="exp-content">
+                    <h3>Scenic Train Ride</h3>
+                    <p>World's most beautiful railway journey</p>
+                </div>
+            </a>
+
+            <a href="#" class="exp-card" onclick="showExperienceDetail('waterfall'); return false;">
+                <div class="exp-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8zm0 18c-3.15 0-6-2.38-6-6.2 0-2.34 1.78-5.06 6-8.54 4.22 3.48 6 6.2 6 8.54 0 3.82-2.85 6.2-6 6.2z"/></svg>
+                </div>
+                <div class="exp-content">
+                    <h3>Ravana Waterfalls</h3>
+                    <p>Visit the majestic 25m waterfall</p>
+                </div>
+            </a>
+
+            <a href="#" class="exp-card" onclick="showExperienceDetail('nine-arch'); return false;">
+                <div class="exp-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg>
+                </div>
+                <div class="exp-content">
+                    <h3>Nine Arch Bridge</h3>
+                    <p>Colonial-era engineering marvel</p>
+                </div>
+            </a>
+        </section>
+
+        <!-- Services Section -->
+        <section class="section">
+            <h2 class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24"><path d="M2 17h20v2H2zm1.15-4.05L4 11.47l.85 1.48 1.3-.75-.85-1.48H7v-1.5H5.3l.85-1.48L4.85 7 4 8.47 3.15 7l-1.3.75.85 1.48H1v1.5h1.7l-.85 1.48 1.3.75zm6.7-.75l1.48.85 1.48-.85-.85-1.48H15v-1.5h-1.7l.85-1.48L12.85 7 12 8.47 11.15 7l-1.3.75.85 1.48H9v1.5h1.7l-.85 1.48zM23 9.22h-1.7l.85-1.48L20.85 7 20 8.47 19.15 7l-1.3.75.85 1.48H17v1.5h1.7l-.85 1.48 1.3.75 1.48-.85 1.48.85.85-1.48H23v-1.5z"/></svg>
+                Villa Services
+            </h2>
+
+            <div class="service-grid">
+                <button class="service-btn" onclick="openModal('room-service')">
+                    <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+                    <h4>Room Service</h4>
+                    <p>24/7 In-villa dining</p>
+                </button>
+
+                <button class="service-btn" onclick="openModal('spa')">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/></svg>
+                    <h4>Spa Booking</h4>
+                    <p>Wellness treatments</p>
+                </button>
+
+                <button class="service-btn" onclick="openModal('concierge')">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    <h4>Concierge</h4>
+                    <p>Travel assistance</p>
+                </button>
+
+                <button class="service-btn" onclick="openModal('transport')">
+                    <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                    <h4>Transport</h4>
+                    <p>Airport transfers</p>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Bottom Bar -->
+    <div class="bottom-bar">
+        <button class="bottom-btn secondary" onclick="openModal('feedback')">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+            Feedback
+        </button>
+        <button class="bottom-btn" onclick="openModal('book')">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"/></svg>
+            Book Activity
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal" onclick="closeModalOnBackground(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Content Templates
+        const modalContent = {
+            'room-service': `
+                <h3>Room Service Menu</h3>
+                <p style="color: var(--text-light); margin-bottom: 1rem;">Available 24 hours</p>
+                <select style="margin-bottom: 1rem;">
+                    <option>Select Category</option>
+                    <option>Breakfast (6AM - 11AM)</option>
+                    <option>All Day Dining</option>
+                    <option>Beverages</option>
+                    <option>Late Night Menu (11PM - 6AM)</option>
+                </select>
+                <textarea placeholder="Enter your order details..." rows="4"></textarea>
+                <input type="text" placeholder="Room Number" value="Ella Villa - Room ">
+                <div class="modal-buttons">
+                    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn primary" onclick="submitForm('Room service order submitted!')">Place Order</button>
+                </div>
+            `,
+            'spa': `
+                <h3>Spa Reservation</h3>
+                <select style="margin-bottom: 1rem;">
+                    <option>Select Treatment</option>
+                    <option>Traditional Massage (60 min) - $80</option>
+                    <option>Ayurvedic Therapy (90 min) - $120</option>
+                    <option>Couples Retreat (120 min) - $200</option>
+                    <option>Facial Treatment (45 min) - $65</option>
+                </select>
+                <input type="date" placeholder="Preferred Date">
+                <select style="margin-bottom: 1rem;">
+                    <option>Preferred Time</option>
+                    <option>9:00 AM</option>
+                    <option>11:00 AM</option>
+                    <option>2:00 PM</option>
+                    <option>4:00 PM</option>
+                    <option>6:00 PM</option>
+                </select>
+                <div class="modal-buttons">
+                    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn primary" onclick="submitForm('Spa appointment requested!')">Request Booking</button>
+                </div>
+            `,
+            'concierge': `
+                <h3>Concierge Services</h3>
+                <p style="color: var(--text-light); margin-bottom: 1rem;">How can we assist you today?</p>
+                <select style="margin-bottom: 1rem;">
+                    <option>Service Type</option>
+                    <option>Restaurant Reservations</option>
+                    <option>Tour Bookings</option>
+                    <option>Transportation</option>
+                    <option>Special Requests</option>
+                    <option>Local Recommendations</option>
+                </select>
+                <textarea placeholder="Describe your request..." rows="4"></textarea>
+                <div class="modal-buttons">
+                    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn primary" onclick="submitForm('Request sent to concierge!')">Send Request</button>
+                </div>
+            `,
+            'transport': `
+                <h3>Transportation</h3>
+                <select style="margin-bottom: 1rem;">
+                    <option>Service Type</option>
+                    <option>Airport Transfer - Bandaranaike (CMB)</option>
+                    <option>Airport Transfer - Mattala (HRI)</option>
+                    <option>Local Taxi Service</option>
+                    <option>Car Rental</option>
+                    <option>Tuk-Tuk Hire</option>
+                </select>
+                <input type="datetime-local" placeholder="Pickup Date/Time">
+                <textarea placeholder="Destination / Special instructions" rows="3"></textarea>
+                <div class="modal-buttons">
+                    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn primary" onclick="submitForm('Transport request submitted!')">Request</button>
+                </div>
+            `,
+            'book': `
+                <h3>Book an Experience</h3>
+                <select style="margin-bottom: 1rem;">
+                    <option>Select Activity</option>
+                    <option>Ella Rock Hiking - $45/person</option>
+                    <option>Scenic Train to Haputale - $15/person</option>
+                    <option>Ravana Waterfalls Tour - $25/person</option>
+                    <option>Nine Arch Bridge Visit - $20/person</option>
+                    <option>Cooking Class - $60/person</option>
+                </select>
+                <input type="date" placeholder="Preferred Date">
+                <input type="number" placeholder="Number of Guests" min="1" max="10">
+                <textarea placeholder="Special requests or dietary requirements" rows="3"></textarea>
+                <div class="modal-buttons">
+                    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn primary" onclick="submitForm('Activity booking request sent!')">Book Now</button>
+                </div>
+            `,
+            'feedback': `
+                <h3>Guest Feedback</h3>
+                <p style="color: var(--text-light); margin-bottom: 1rem;">Help us improve your stay</p>
+                <select style="margin-bottom: 1rem;">
+                    <option>Feedback Category</option>
+                    <option>Room & Facilities</option>
+                    <option>Service Quality</option>
+                    <option>Dining Experience</option>
+                    <option>Activities & Tours</option>
+                    <option>General Feedback</option>
+                </select>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-light);">Rating</label>
+                    <div style="font-size: 1.5rem; letter-spacing: 0.3rem;">⭐⭐⭐⭐⭐</div>
+                </div>
+                <textarea placeholder="Share your experience..." rows="4"></textarea>
+                <div class="modal-buttons">
+                    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn primary" onclick="submitForm('Thank you for your feedback!')">Submit</button>
+                </div>
+            `,
+            'emergency': `
+                <h3>Emergency Contacts</h3>
+                <div style="margin-bottom: 1rem;">
+                    <p style="font-weight: 600; color: var(--primary-green);">Villa Reception</p>
+                    <a href="tel:+94123456789" style="color: var(--soft-green); font-size: 1.2rem; text-decoration: none;">+94 123 456 789</a>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <p style="font-weight: 600; color: var(--primary-green);">Local Police</p>
+                    <a href="tel:119" style="color: var(--soft-green); font-size: 1.2rem; text-decoration: none;">119</a>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <p style="font-weight: 600; color: var(--primary-green);">Ambulance</p>
+                    <a href="tel:1990" style="color: var(--soft-green); font-size: 1.2rem; text-decoration: none;">1990</a>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <p style="font-weight: 600; color: var(--primary-green);">Tourist Police</p>
+                    <a href="tel:+94112224211" style="color: var(--soft-green); font-size: 1.2rem; text-decoration: none;">+94 11 222 4211</a>
+                </div>
+                <button class="modal-btn primary" onclick="closeModal()" style="width: 100%;">Close</button>
+            `
+        };
+
+        function openModal(type) {
+            const modal = document.getElementById('modal');
+            const body = document.getElementById('modal-body');
+            body.innerHTML = modalContent[type] || '<h3>Coming Soon</h3><p>This feature is being prepared for you.</p>';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnBackground(event) {
+            if (event.target === event.currentTarget) {
+                closeModal();
+            }
+        }
+
+        function submitForm(message) {
+            // Simulate form submission
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                closeModal();
+                // Show success notification (simple alert for now, could be a toast)
+                setTimeout(() => {
+                    alert(message);
+                }, 300);
+            }, 800);
+        }
+
+        function showExperienceDetail(type) {
+            const details = {
+                'hiking': 'Ella Rock Hiking: A challenging 4-hour trek offering panoramic views of Ella Gap. Includes guide, water, and snacks. Starts at 6 AM. $45 per person.',
+                'train': 'Scenic Train Ride: Journey through tea plantations and mountain tunnels on the iconic blue train to Haputale. 2.5 hours each way. $15 per person.',
+                'waterfall': 'Ravana Waterfalls: Visit the 25-meter waterfall associated with the Ramayana epic. Swimming possible. 30-minute drive. $25 including transport.',
+                'nine-arch': 'Nine Arch Bridge: Colonial-era railway bridge surrounded by jungle. Best visited early morning or late afternoon. 20-minute drive. $20 including transport.'
+            };
+            alert(details[type] || 'Details coming soon!');
+        }
+
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Touch feedback for buttons
+        document.querySelectorAll('.service-btn, .exp-card, .card').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            btn.addEventListener('touchend', function() {
+                this.style.transform = '';
+            });
+        });
+    </script>
+</body>
+</html>
